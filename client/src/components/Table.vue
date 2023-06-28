@@ -3,6 +3,7 @@
     <thead>
       <tr class="bg-orange-500 color-white">
         <th
+          class="text-white"
           :class="`${customClass} border`"
           v-for="(col, index) in cols"
           :key="index"

@@ -22,7 +22,9 @@ const cols = [
 
 <template>
   <Header></Header>
-  <div class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
+  <div
+    class="mx-auto flex flex-wrap max-w-7xl items-center justify-between p-6 lg:px-8"
+  >
     <Session />
     <TransactionBox />
   </div>

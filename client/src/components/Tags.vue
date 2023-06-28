@@ -1,9 +1,11 @@
 <template>
-  <span class="w-auto, h-auto">{{ text.toUppercase() }}</span>
+  <div>
+    <span>
+      <slot></slot>
+    </span>
+  </div>
 </template>
 
 <script>
-export default {
-  props: ["text"],
-};
+export default {};
 </script>

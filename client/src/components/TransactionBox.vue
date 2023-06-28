@@ -1,7 +1,7 @@
 <template>
   <div class="dev flex w-1/2 justify-center items-center rounded border-0">
     <div
-      class="flex w-5/6 items-center border-2 border-orange-700 rounded flex-col"
+      class="flex w-5/6 items-center border-2 border-orange-700 rounded flex-col h-[437.500px]"
     >
       <div class="flex justify-center w-[99.9%] rounded h-[40px] bg-orange-700">
         <div class="flex justify-between items-center w-5/6">
