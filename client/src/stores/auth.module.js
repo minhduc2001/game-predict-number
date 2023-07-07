@@ -9,6 +9,18 @@ export const auth = {
   namespaced: true,
   state: initialState,
   actions: {
+    reloadUser({ commit }) {
+      return AuthService.reloadUser().then(
+        (user) => {
+          commit("loginSuccess", user);
+          return Promise.resolve(user);
+        },
+        (error) => {
+          commit("loginFailure");
+          return Promise.reject(error);
+        }
+      );
+    },
     login({ commit }, user) {
       return AuthService.login(user).then(
         (user) => {
@@ -27,9 +39,9 @@ export const auth = {
     },
     register({ commit }, user) {
       return AuthService.register(user).then(
-        (response) => {
+        (user) => {
           commit("registerSuccess");
-          return Promise.resolve(response.data);
+          return Promise.resolve(user);
         },
         (error) => {
           commit("registerFailure");

@@ -142,20 +142,28 @@ export default {
   },
   methods: {
     register() {
-      if (this.comparePasswords()) {
-        this.toast.info("Mật khẩu không khớp!");
-      }
+      this.$store
+        .dispatch("auth/register", {
+          email: this.email,
+          password: this.password,
+        })
+        .then((res) => {
+          if (res.hasOwnProperty("id")) {
+            this.$router.push("/");
+          } else {
+            this.toast.error(res);
+          }
+        });
     },
     comparePasswords() {
       return this.password === this.rePassword;
     },
     handleRegister(event) {
       event.preventDefault();
-      console.log(this.comparePasswords());
       if (!this.comparePasswords()) {
         this.color = "red";
-        this.toast.info("Mật khẩu không khớp!");
-      }
+        this.toast.warning("Mật khẩu không khớp!");
+      } else this.register();
     },
   },
 };

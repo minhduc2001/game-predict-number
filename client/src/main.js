@@ -14,6 +14,10 @@ import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 
+// interceptor
+import setupInterceptors from "./services/setupInterceptors";
+setupInterceptors(store);
+
 const vuetify = createVuetify({
   components,
   directives,
@@ -25,8 +29,6 @@ const options = {
 };
 
 const app = createApp(App);
-
-// app.config.globalProperties.$socket = socket;
 
 app.use(vuetify);
 app.use(Toast, options);

@@ -130,6 +130,7 @@
 </template>
 <script>
 import { useToast } from "vue-toastification";
+import authService from "../services/auth.service";
 export default {
   data() {
     return {
@@ -174,16 +175,22 @@ export default {
     },
     autoLogin() {
       if (this.email && this.password) {
-        this.login(this.email, this.password);
+        // this.login(this.email, this.password);
       }
     },
-    login() {
-      if (this.email === "example@gmail.com" && this.password === "password") {
-        console.log("Đăng nhập thành công!");
-        this.$router.push("/");
-      } else {
-        this.toast.error("Tên đăng nhập hoặc mật khẩu không chính xác!");
-      }
+    async login() {
+      this.$store
+        .dispatch("auth/login", {
+          email: this.email,
+          password: this.password,
+        })
+        .then((res) => {
+          if (res.hasOwnProperty("id")) {
+            this.$router.push("/");
+          } else {
+            this.toast.error(res);
+          }
+        });
     },
     handleLoginSubmit(event) {
       event.preventDefault();

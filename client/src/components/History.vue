@@ -12,7 +12,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
+      <tr v-if="listData" v-for="(data, index) in listData">
         <td class="text-center">
           <Tags
             class="text-white text-xs rounded bg-red-500 uppercase py-[3px] font-bold"
@@ -22,24 +22,25 @@
         <td class="text-center">
           <Tags
             class="text-white text-xs rounded bg-yellow-400 py-[3px] font-bold"
-            >Katana</Tags
+            >{{ `HaNoi` }}</Tags
           >
         </td>
         <td class="text-center">
-          {{ `anhyeuem` }}
+          {{ data.user.username }}
         </td>
 
-        <td class="text-center">
-          {{ `10000000xu` }}
-        </td>
+        <td class="text-center">{{ data.xu_dat }} Xu</td>
 
         <td class="text-center">
           <Tags
             class="text-white text-xs rounded bg-yellow-400 py-[3px] font-bold"
-            >Chẵn</Tags
+            :style="`background-color:${
+              formatSelection(data.selection)?.color
+            };`"
+            >{{ formatSelection(data.selection)?.text }}</Tags
           >
         </td>
-        <td class="text-center">
+        <td class="text-center" v-if="data.status == 0">
           <v-progress-circular
             indeterminate
             size="20"
@@ -47,7 +48,16 @@
             color="#22c55e"
           ></v-progress-circular>
         </td>
-        <td class="text-center">
+        <td class="text-center" v-else>
+          <Tags
+            class="text-white text-xs rounded bg-yellow-400 py-[3px] font-bold"
+            :style="`background-color:${
+              data.status == 1 ? '#d9534f' : '#5cb85c'
+            };`"
+            >{{ data.status == 1 ? "Thua" : "Đã nhận thưởng" }}</Tags
+          >
+        </td>
+        <td v-if="data.xu_an == null" class="text-center">
           <v-progress-circular
             indeterminate
             color="#2dd4bf"
@@ -55,105 +65,10 @@
             width="2"
           ></v-progress-circular>
         </td>
+        <td v-else class="text-center">{{ data.xu_an }} Xu</td>
 
         <td class="text-center">
-          {{ new Date().getDate() }}
-        </td>
-      </tr>
-      <tr>
-        <td class="text-center">
-          <Tags
-            class="text-white text-xs rounded bg-red-500 uppercase py-[3px] font-bold"
-            >Thường</Tags
-          >
-        </td>
-        <td class="text-center">
-          <Tags
-            class="text-white text-xs rounded bg-yellow-400 py-[3px] font-bold"
-            >Katana</Tags
-          >
-        </td>
-        <td class="text-center">
-          {{ `anhyeuem` }}
-        </td>
-
-        <td class="text-center">
-          {{ `10000000xu` }}
-        </td>
-
-        <td class="text-center">
-          <Tags
-            class="text-white text-xs rounded bg-yellow-400 py-[3px] font-bold"
-            >Chẵn</Tags
-          >
-        </td>
-        <td class="text-center">
-          <v-progress-circular
-            indeterminate
-            size="20"
-            width="2"
-            color="#22c55e"
-          ></v-progress-circular>
-        </td>
-        <td class="text-center">
-          <v-progress-circular
-            indeterminate
-            color="#2dd4bf"
-            size="20"
-            width="2"
-          ></v-progress-circular>
-        </td>
-
-        <td class="text-center">
-          {{ new Date().getDate() }}
-        </td>
-      </tr>
-      <tr>
-        <td class="text-center">
-          <Tags
-            class="text-white text-xs rounded bg-red-500 uppercase py-[3px] font-bold"
-            >Thường</Tags
-          >
-        </td>
-        <td class="text-center">
-          <Tags
-            class="text-white text-xs rounded bg-yellow-400 py-[3px] font-bold"
-            >Katana</Tags
-          >
-        </td>
-        <td class="text-center">
-          {{ `anhyeuem` }}
-        </td>
-
-        <td class="text-center">
-          {{ `10000000xu` }}
-        </td>
-
-        <td class="text-center">
-          <Tags
-            class="text-white text-xs rounded bg-yellow-400 py-[3px] font-bold"
-            >Chẵn</Tags
-          >
-        </td>
-        <td class="text-center">
-          <v-progress-circular
-            indeterminate
-            size="20"
-            width="2"
-            color="#22c55e"
-          ></v-progress-circular>
-        </td>
-        <td class="text-center">
-          <v-progress-circular
-            indeterminate
-            color="#2dd4bf"
-            size="20"
-            width="2"
-          ></v-progress-circular>
-        </td>
-
-        <td class="text-center">
-          {{ new Date().getDate() }}
+          {{ formatDate(data.createdAt) }}
         </td>
       </tr>
     </tbody>
@@ -163,9 +78,18 @@
 <script>
 import Table from "./Table.vue";
 import Tags from "./Tags.vue";
+import moment from "moment";
 export default {
   props: [],
   components: { Table, Tags },
+  computed: {
+    listData() {
+      return this.$store.state.transaction.data;
+    },
+  },
+  mounted() {
+    this.getDataTable();
+  },
   data() {
     return {
       totalTime: 120,
@@ -181,6 +105,39 @@ export default {
         "Thời gian",
       ],
     };
+  },
+  methods: {
+    getDataTable() {
+      this.$store.dispatch("transaction/getData", { limit: 10 });
+    },
+    formatDate(date) {
+      return moment(date).format("hh:mm:ss a DD/MM/YYYY");
+    },
+    formatSelection(select) {
+      if (select == 0)
+        return {
+          color: "#f0ad4e",
+          text: "Chẵn",
+        };
+
+      if (select == 1)
+        return {
+          color: "#5bc0de",
+          text: "Lẻ",
+        };
+
+      if (select == 2)
+        return {
+          color: "#5cb85c",
+          text: "Tài",
+        };
+
+      if (select == 3)
+        return {
+          color: "#d9534f",
+          text: "Xỉu",
+        };
+    },
   },
 };
 </script>

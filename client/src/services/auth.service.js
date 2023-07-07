@@ -2,18 +2,25 @@ import api from "./api";
 import TokenService from "./token.service";
 
 class AuthService {
-  login({ username, password }) {
+  async login({ email, password }) {
     return api
-      .post("/auth/signin", {
-        username,
+      .post("/auth/login", {
+        email,
         password,
       })
       .then((response) => {
-        if (response.data.accessToken) {
-          TokenService.setUser(response.data);
+        if (!response.data.success) throw new Error(response.data.message);
+        return response.data;
+      })
+      .then(({ data }) => {
+        if (data.accessToken) {
+          TokenService.setUser(data);
         }
 
-        return response.data;
+        return data;
+      })
+      .catch((e) => {
+        return e.message;
       });
   }
 
@@ -21,12 +28,44 @@ class AuthService {
     TokenService.removeUser();
   }
 
-  register({ username, email, password }) {
-    return api.post("/auth/signup", {
-      username,
-      email,
-      password,
-    });
+  async register({ email, password }) {
+    return api
+      .post("/auth/register", {
+        email,
+        password,
+      })
+      .then((response) => {
+        if (!response.data.success) throw new Error(response.data.message);
+        return response.data;
+      })
+      .then(({ data }) => {
+        if (data.accessToken) {
+          TokenService.setUser(data);
+        }
+        return data;
+      })
+      .catch((e) => {
+        return e.message;
+      });
+  }
+
+  async reloadUser() {
+    return api
+      .get("/user/me")
+      .then((response) => {
+        if (!response.data.success) throw new Error(response.data.message);
+        return response.data;
+      })
+      .then(({ data }) => {
+        if (data.accessToken) {
+          TokenService.setUser(data);
+        }
+
+        return data;
+      })
+      .catch((e) => {
+        return e.message;
+      });
   }
 }
 

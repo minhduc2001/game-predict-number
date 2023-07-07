@@ -11,7 +11,24 @@
         </a>
       </div>
 
-      <PopoverGroup class="hidden lg:flex lg:gap-x-12">
+      <PopoverGroup v-if="currentUser" class="hidden lg:flex lg:gap-x-12">
+        <a href="#" class="text-sm font-semibold leading-6 text-gray-900"
+          >Trang chủ</a
+        >
+        <a href="#" class="text-sm font-semibold leading-6 text-gray-900"
+          >Nạp Xu</a
+        >
+        <a href="#" class="text-sm font-semibold leading-6 text-gray-900"
+          >Rút Xu</a
+        >
+        <a href="#" class="text-sm font-semibold leading-6 text-gray-900"
+          >Biến động số dư</a
+        >
+        <a href="#" class="text-sm font-semibold leading-6 text-gray-900"
+          >Lịch sử</a
+        >
+      </PopoverGroup>
+      <PopoverGroup v-else class="hidden lg:flex lg:gap-x-12">
         <a href="#" class="text-sm font-semibold leading-6 text-gray-900"
           >Trang chủ</a
         >
@@ -30,13 +47,16 @@
           class="mr-2"
           image="https://i2.wp.com/gi-builds.sfo3.digitaloceanspaces.com/characters/kamisato_ayaka/image.png?strip=all&quality=100&w=160"
         ></v-avatar>
-        <a href="#" class="text-sm font-semibold leading-6 text-gray-900"
+        <a
+          href="#"
+          class="text-sm font-semibold leading-6 text-gray-900"
+          @click="logOut"
           >Log out <span aria-hidden="true">&rarr;</span></a
         >
       </div>
 
       <div v-else class="hidden lg:flex lg:flex-1 lg:justify-end">
-        <a href="#" class="text-sm font-semibold leading-6 text-gray-900"
+        <a href="/login" class="text-sm font-semibold leading-6 text-gray-900"
           >Log in <span aria-hidden="true">&rarr;</span></a
         >
       </div>
@@ -68,15 +88,13 @@ export default {
     },
   },
   methods: {
-    logOut() {
+    logOut(e) {
       this.$store.dispatch("auth/logout");
-      this.$router.push("/login");
+      // this.$router.push("/");
     },
   },
   mounted() {
-    // EventBus.on("logout", () => {
-    //   this.logOut();
-    // });
+    this.$store.dispatch("auth/reloadUser");
   },
   beforeUnmount() {
     // EventBus.remove("logout");
