@@ -10,7 +10,12 @@ export default {
   data() {
     return {
       disabledInput: false,
+      socket: null,
+      reload: null,
     };
+  },
+  mounted() {
+    this.socket = this.$refs.session.socket;
   },
 };
 </script>
@@ -20,11 +25,11 @@ export default {
   <div
     class="mx-auto flex flex-wrap max-w-7xl items-center justify-between p-6 lg:px-8"
   >
-    <Session :disabledInput="disabledInput" />
-    <TransactionBox :disabledInput="disabledInput" />
+    <Session :disabledInput="disabledInput" :socket="socket" ref="session" />
+    <TransactionBox :disabledInput="disabledInput" :socket="socket" />
   </div>
   <div class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
-    <History></History>
+    <History :reload="reload"></History>
   </div>
 </template>
 

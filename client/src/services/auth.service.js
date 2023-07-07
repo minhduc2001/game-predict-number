@@ -57,6 +57,7 @@ class AuthService {
         return response.data;
       })
       .then(({ data }) => {
+        console.log(data);
         if (data.accessToken) {
           TokenService.setUser(data);
         }

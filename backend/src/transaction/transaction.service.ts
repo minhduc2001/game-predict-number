@@ -8,6 +8,7 @@ import { PaginateConfig } from '@/base/service/paginate/paginate';
 import { SessionService } from '@/session/session.service';
 import { EStatus } from './transaction.enum';
 import { UserService } from '@/user/user.service';
+import * as exc from '@base/api/exception.reslover';
 
 @Injectable()
 export class TransactionService extends BaseService<Transaction> {
@@ -34,10 +35,23 @@ export class TransactionService extends BaseService<Transaction> {
   }
 
   async set(dto: SetTransactionDto) {
+    if (dto.user.coin < dto.xu_dat)
+      throw new exc.BadException({
+        message: 'Số dư không đủ',
+        errorCode: '0000',
+      });
+    const user = await this.userService.getUserById(dto.user.id);
     const transaction = this.repository.create(dto);
     const session = await this.sessionService.getTurn();
+    if (session.coinRandom)
+      throw new exc.BadException({
+        message: 'Quá thời gian đặt',
+        errorCode: '123123',
+      });
     session.coin = String(Number(transaction.xu_dat) + Number(session.coin));
     transaction.session = session;
+    user.updateCoin(`-${dto.xu_dat}`);
+    await user.save();
     await session.save();
     return transaction.save();
   }

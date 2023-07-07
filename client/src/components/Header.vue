@@ -72,20 +72,23 @@ export default {
     currentUser() {
       return this.$store.state.auth.user;
     },
-    showAdminBoard() {
-      if (this.currentUser && this.currentUser["roles"]) {
-        return this.currentUser["roles"].includes("ROLE_ADMIN");
-      }
-
-      return false;
+    showLogOut() {
+      if (this.currentUser) this.$store.dispatch("auth/reloadUser");
     },
-    showModeratorBoard() {
-      if (this.currentUser && this.currentUser["roles"]) {
-        return this.currentUser["roles"].includes("ROLE_MODERATOR");
-      }
+    // showAdminBoard() {
+    //   if (this.currentUser && this.currentUser["roles"]) {
+    //     return this.currentUser["roles"].includes("ROLE_ADMIN");
+    //   }
 
-      return false;
-    },
+    //   return false;
+    // },
+    // showModeratorBoard() {
+    //   if (this.currentUser && this.currentUser["roles"]) {
+    //     return this.currentUser["roles"].includes("ROLE_MODERATOR");
+    //   }
+
+    //   return false;
+    // },
   },
   methods: {
     logOut(e) {
@@ -93,9 +96,7 @@ export default {
       // this.$router.push("/");
     },
   },
-  mounted() {
-    this.$store.dispatch("auth/reloadUser");
-  },
+  mounted() {},
   beforeUnmount() {
     // EventBus.remove("logout");
   },

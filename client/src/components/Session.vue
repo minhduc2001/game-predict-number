@@ -126,7 +126,6 @@ import Random from "./Random.vue";
 import Tags from "./Tags.vue";
 import sessionService from "../services/session.service";
 export default {
-  props: [],
   components: { Tags, Random, Timer },
   data() {
     return {
@@ -169,10 +168,15 @@ export default {
       this.callCLTX();
     });
 
+    this.socket.on("reload", () => {
+      this.$store.dispatch("transaction/reload");
+    });
+
     this.socket.on("session", (data) => {
       // if (data == 15) this.$store.commit("session/disable");
       this.session = data;
     });
+    this.$store.dispatch("transaction/setSK", this.socket);
     this.callCLTX();
   },
   beforeUnmount() {

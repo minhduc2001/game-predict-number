@@ -41,7 +41,7 @@ export class SessionService extends BaseService<Session> {
       if (val.res_tx) tx.push(0);
       else tx.push(1);
     }
-    console.log(session);
+
     return {
       cl: cl,
       tx: tx,

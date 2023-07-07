@@ -81,6 +81,7 @@ export default {
   components: { Table, Random, Button },
   computed: {
     currentUser() {
+      console.log(this.$store.state.auth.user);
       return this.$store.state.auth.user;
     },
     getDisableInput() {
@@ -89,7 +90,13 @@ export default {
       // return this.$store.state.session?.disabledInput;
     },
     activeButton() {
-      if (this.currentUser && this.coin) return false;
+      if (
+        this.currentUser &&
+        this.coin &&
+        /^\d+$/.test(this.coin) &&
+        Number(this.currentUser.coin) >= Number(this.coin)
+      )
+        return false;
       return true;
     },
   },
@@ -101,12 +108,14 @@ export default {
   },
   methods: {
     onSetSelection(number) {
-      this.$store.dispatch("transaction/setSelection", {
-        selection: number,
-        xu_dat: this.coin,
-        vxmm: 0,
-        server: 0,
-      });
+      this.$store
+        .dispatch("transaction/setSelection", {
+          selection: number,
+          xu_dat: this.coin,
+          vxmm: 0,
+          server: 0,
+        })
+        .then(() => this.$store.dispatch("transaction/emitClick"));
     },
     handleSetSelection(number) {
       this.onSetSelection(number);

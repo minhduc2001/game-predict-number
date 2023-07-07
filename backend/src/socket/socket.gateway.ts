@@ -37,6 +37,9 @@ export class SocketGateway
   handleConnection(socket: Socket) {
     console.log('Client đã kết nối:', socket.id);
     this.userSession.push(socket.id);
+    socket.on('click', () => {
+      this.server.emit('reload');
+    });
 
     socket.emit('countdown', this.countdown);
 

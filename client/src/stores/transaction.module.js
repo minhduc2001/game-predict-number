@@ -1,6 +1,6 @@
 import TransactionService from "../services/transaction.service";
 
-const initialState = { status: false, data: null, limit: 10 };
+const initialState = { status: false, data: null, limit: 10, socket: null };
 
 export const transaction = {
   namespaced: true,
@@ -22,7 +22,6 @@ export const transaction = {
       dispatch("getData", { limit: state?.limit });
     },
     setSelection({ commit, dispatch, state }, data) {
-      console.log(state);
       return TransactionService.setSelection(data).then(
         (data) => {
           dispatch("auth/reloadUser", null, { root: true });
@@ -34,6 +33,16 @@ export const transaction = {
         }
       );
     },
+    setSK({ commit }, data) {
+      commit("setSocket", data);
+    },
+    emitClick({ commit, state }) {
+      return state.socket.emit("click");
+    },
+    reload({ commit, dispatch, state }) {
+      dispatch("getData", { limit: state?.limit });
+      return;
+    },
   },
   mutations: {
     getDataSuscess(state, data) {
@@ -44,6 +53,9 @@ export const transaction = {
     loginFailure(state) {
       state.status = false;
       state.data = null;
+    },
+    setSocket(state, data) {
+      state.socket = data;
     },
   },
 };

@@ -104,6 +104,10 @@ export default {
         "Xu ăn",
         "Thời gian",
       ],
+      socket: {
+        type: Object,
+        required: true,
+      },
     };
   },
   methods: {
