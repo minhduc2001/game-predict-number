@@ -25,7 +25,7 @@ async function bootstrap() {
   app.use(`/uploads`, express.static('uploads'));
   app.use(bodyParser.json({ limit: '10mb' }));
   app.use(morgan('dev'));
-  app.enableCors({ origin: 'http://127.0.0.1:5173' });
+  app.enableCors({ origin: '*' });
 
   app.useGlobalInterceptors(new ResponseTransformInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter(loggerService));

@@ -133,13 +133,13 @@ export default {
       if (select == 2)
         return {
           color: "#5cb85c",
-          text: "Tài",
+          text: ">= 5",
         };
 
       if (select == 3)
         return {
           color: "#d9534f",
-          text: "Xỉu",
+          text: "< 5",
         };
     },
   },

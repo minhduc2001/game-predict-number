@@ -58,14 +58,14 @@
           color="#5cb85c"
           :disabled="activeButton"
           @click="handleSetSelection(2)"
-          >Đặt Tài</Button
-        >
+          >Đặt >=5
+        </Button>
         <Button
           class="m-5 w-[100px] text-white"
           color="#d9534f"
           :disabled="activeButton"
           @click="handleSetSelection(3)"
-          >Đặt Xỉu</Button
+          >Đặt &lt 5</Button
         >
       </div>
     </div>
