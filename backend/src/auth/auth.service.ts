@@ -57,4 +57,6 @@ export class AuthService {
       accessToken: accessToken,
     };
   }
+
+  thirdPartyLogin(data: any) {}
 }
